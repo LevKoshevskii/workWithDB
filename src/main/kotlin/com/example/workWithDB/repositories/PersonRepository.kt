@@ -6,9 +6,9 @@ interface PersonRepository {
 
     fun getAll(): List<Person>
 
-    fun findByName(name: String): List<Person>
+    fun findByName(name: String): List<Person>?
 
-    fun findByLastName(lastName: String): List<Person>
+    fun findByLastName(lastName: String): List<Person>?
 
     fun findById(id: Int): Person?
 

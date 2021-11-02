@@ -1,6 +1,5 @@
 package com.example.workWithDB.controllers
 
-import com.example.workWithDB.Service.PersonService
 import com.example.workWithDB.models.Person
 import com.example.workWithDB.repositories.PersonRepository
 import org.springframework.web.bind.annotation.*
@@ -8,36 +7,36 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/person")
 class PersonController(
-    private val personService: PersonService) {
+    private val personRepository: PersonRepository) {
 
     @GetMapping
     fun getAll():List<Person> =
-        personService.getAll()
+        personRepository.getAll()
 
     @GetMapping("name/{name}")
-    fun findByName(@PathVariable("name") name: String):List<Person> =
-        personService.findByName(name)
+    fun findByName(@PathVariable("name") name: String):List<Person>? =
+        personRepository.findByName(name)
 
     @GetMapping("lastName/{lastName}")
     fun findByLastName(@PathVariable lastName: String) =
-        personService.findByLastName(lastName)
+        personRepository.findByLastName(lastName)
 
     @GetMapping("/id/{id}")
-    fun findById(@PathVariable("id") id:Int): Person =
-        personService.findById(id)
+    fun findById(@PathVariable("id") id:Int): Person? =
+        personRepository.findById(id)
 
     @PostMapping
     fun addNewPerson(@RequestParam name: String, @RequestParam lastName: String){
-        personService.addNewPerson(Person(name = name, lastName = lastName))
+        personRepository.addNewPerson(Person(name = name, lastName = lastName))
     }
 
     @PutMapping("/{id}")
-    fun updatePerson(@PathVariable("id") id:Int, @RequestParam name: String, @RequestParam lastName: String){
-        personService.updatePerson(id,Person(name = name, lastName = lastName))
+    fun addNewPerson(@PathVariable("id") id:Int, @RequestParam name: String, @RequestParam lastName: String){
+        personRepository.updatePerson(id,Person(name = name, lastName = lastName))
     }
 
     @DeleteMapping("/{id}")
     fun deletePerson(@PathVariable("id") id:Int){
-        personService.deleteById(id)
+        personRepository.deleteById(id)
     }
 }
