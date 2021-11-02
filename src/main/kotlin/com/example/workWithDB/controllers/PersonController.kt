@@ -15,7 +15,7 @@ class PersonController(
         personService.getAll()
 
     @GetMapping("name/{name}")
-    fun findByName(@PathVariable("name") name: String):List<Person>? =
+    fun findByName(@PathVariable("name") name: String):List<Person> =
         personService.findByName(name)
 
     @GetMapping("lastName/{lastName}")
