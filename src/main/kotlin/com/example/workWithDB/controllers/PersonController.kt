@@ -1,5 +1,6 @@
 package com.example.workWithDB.controllers
 
+import com.example.workWithDB.Service.PersonService
 import com.example.workWithDB.models.Person
 import com.example.workWithDB.repositories.PersonRepository
 import org.springframework.web.bind.annotation.*
@@ -7,36 +8,36 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/person")
 class PersonController(
-    private val personRepository: PersonRepository) {
+    private val personService: PersonService) {
 
     @GetMapping
     fun getAll():List<Person> =
-        personRepository.getAll()
+        personService.getAll()
 
     @GetMapping("name/{name}")
     fun findByName(@PathVariable("name") name: String):List<Person>? =
-        personRepository.findByName(name)
+        personService.findByName(name)
 
     @GetMapping("lastName/{lastName}")
     fun findByLastName(@PathVariable lastName: String) =
-        personRepository.findByLastName(lastName)
+        personService.findByLastName(lastName)
 
     @GetMapping("/id/{id}")
-    fun findById(@PathVariable("id") id:Int): Person? =
-        personRepository.findById(id)
+    fun findById(@PathVariable("id") id:Int): Person =
+        personService.findById(id)
 
     @PostMapping
     fun addNewPerson(@RequestParam name: String, @RequestParam lastName: String){
-        personRepository.addNewPerson(Person(name = name, lastName = lastName))
+        personService.addNewPerson(Person(name = name, lastName = lastName))
     }
 
     @PutMapping("/{id}")
-    fun addNewPerson(@PathVariable("id") id:Int, @RequestParam name: String, @RequestParam lastName: String){
-        personRepository.updatePerson(id,Person(name = name, lastName = lastName))
+    fun updatePerson(@PathVariable("id") id:Int, @RequestParam name: String, @RequestParam lastName: String){
+        personService.updatePerson(id,Person(name = name, lastName = lastName))
     }
 
     @DeleteMapping("/{id}")
     fun deletePerson(@PathVariable("id") id:Int){
-        personRepository.deleteById(id)
+        personService.deleteById(id)
     }
 }
