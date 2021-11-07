@@ -3,9 +3,17 @@ package com.example.workWithDB
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
-@SpringBootApplication
-class WorkWithDbApplication
+import com.example.workWithDB.Service.WatcherService
 
-fun main(args: Array<String>) {
-	runApplication<WorkWithDbApplication>(*args)
+@SpringBootApplication
+class WorkWithDbApplication{
+	companion object {
+		@JvmStatic
+		fun main(args: Array<String>) {
+			val applicationContext = runApplication<WorkWithDbApplication>(*args)
+
+			val watcherService: WatcherService = applicationContext.getBean("watcherService",WatcherService::class.java)
+			watcherService.watchNewPersons()
+		}
+	}
 }
