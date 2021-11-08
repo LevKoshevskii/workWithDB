@@ -26,6 +26,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation ("org.springframework.boot:spring-boot-starter-jdbc:2.5.6")
 	implementation ("com.google.code.gson:gson:2.8.9")
+	implementation ("org.springframework.boot:spring-boot-starter-activemq:2.5.6")
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.5")
 }
 
 tasks.withType<KotlinCompile> {

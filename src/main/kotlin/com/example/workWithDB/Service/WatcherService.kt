@@ -1,7 +1,7 @@
 package com.example.workWithDB.Service
 
+import com.example.workWithDB.ActiveMQ.ActiveMQSender
 import com.example.workWithDB.models.Person
-import com.example.workWithDB.repositories.PersonRepository
 import com.example.workWithDB.util.JsonReader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,10 +13,12 @@ import java.nio.file.WatchKey
 import java.nio.file.WatchService
 
 @Service
-class WatcherService(private val personRepository: PersonRepository) {
+
+class WatcherService(private val personService: PersonService,
+                    private val activeMQSender: ActiveMQSender) {
     val log: Logger = LoggerFactory.getLogger("WatcherService")
     fun watchNewPersons(){
-        val directoryPath = Paths.get("/Users/lev/Desktop/workWithDB/src/main/resources/json")
+        val directoryPath = Paths.get("/Users/lev/Desktop/workWithDB/src/main/resources/newPersons")
         val watcher: WatchService = directoryPath.fileSystem.newWatchService()
         val key: WatchKey = directoryPath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE)
 
@@ -24,23 +26,20 @@ class WatcherService(private val personRepository: PersonRepository) {
             for (event in key.pollEvents()){
                 when (event.kind()) {
                     StandardWatchEventKinds.ENTRY_CREATE -> {
+                        print(event.context())
                         val input = File("$directoryPath/${event.context()}")
-                        val json = input.readText()
-                        val jsonReader = JsonReader()
-                        var isExist: Boolean = false
-                        var persons: List<Person> = jsonReader.getPersons(json)
-                        for (person in persons){
-                            val existingPerson: List<Person> = personRepository.findByName(person.name)
-                            for (existPerson in existingPerson){
-                                if (person.equals(existPerson)){
-                                        log.info("ignoring Person{${person.name}, ${person.lastName}}")
-                                    isExist = true
-                                    break
+                        val fileName:String = "${event.context()}"
+                        val inputText = input.readText()
+                        if (fileName.substring(fileName.lastIndexOf(".")+1) == "json") {
+                            val jsonReader = JsonReader()
+                            var persons: List<Person> = jsonReader.getPersons(inputText)
+                            persons.forEach {
+                                if (!personService.addNewPersonIfNotExist(it)) {
+                                    log.info("ignoring Person{${it.name}, ${it.lastName}}")
                                 }
                             }
-                            if (!isExist){
-                                personRepository.addNewPerson(person)
-                            }
+                        }else{
+                            activeMQSender.sendXmlToPersonsQueue(inputText)
                         }
                     }
                 }

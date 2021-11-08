@@ -32,4 +32,15 @@ class PersonServiceImpl(private val personRepository: PersonRepository): PersonS
     override fun deleteById(id: Int) {
         personRepository.deleteById(id)
     }
+
+    override fun addNewPersonIfNotExist(newPerson: Person): Boolean {
+        val existingPerson: List<Person> = personRepository.findByName(newPerson.name)
+        existingPerson.forEach{
+            if (it.equals(newPerson)){
+                return false
+            }
+        }
+        personRepository.addNewPerson(newPerson)
+        return true
+    }
 }

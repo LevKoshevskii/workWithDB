@@ -2,8 +2,8 @@ package com.example.workWithDB.models
 
 data class Person (
     val id:Int = 0,
-    val name:String,
-    val lastName: String
+    val name:String = "",
+    val lastName: String = ""
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -16,4 +16,6 @@ interface PersonService {
     fun updatePerson(id: Int,updatedPerson: Person)
 
     fun deleteById(id: Int)
+
+    fun addNewPersonIfNotExist(person: Person): Boolean
 }

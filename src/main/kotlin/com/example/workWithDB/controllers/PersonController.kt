@@ -2,7 +2,6 @@ package com.example.workWithDB.controllers
 
 import com.example.workWithDB.Service.PersonService
 import com.example.workWithDB.models.Person
-import com.example.workWithDB.repositories.PersonRepository
 import org.springframework.web.bind.annotation.*
 
 @RestController
