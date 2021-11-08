@@ -13,7 +13,6 @@ import java.nio.file.WatchKey
 import java.nio.file.WatchService
 
 @Service
-
 class WatcherService(private val personService: PersonService,
                     private val activeMQSender: ActiveMQSender) {
     val log: Logger = LoggerFactory.getLogger("WatcherService")
